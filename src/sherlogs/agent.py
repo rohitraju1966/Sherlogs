@@ -12,13 +12,13 @@ from langgraph.graph import END, StateGraph
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
 
-from sherlogs.baseline import build_prompt
 from sherlogs.config import MAX_HOPS, MODEL_NAME
 from sherlogs.loader import IncidentCase
 from sherlogs.pipeline import build_tables
-from sherlogs.prompt import SYSTEM_PROMPT
+from sherlogs.prompt import SYSTEM_PROMPT_AGENT
 from sherlogs.tools import create_tools
 from sherlogs.types import Verdict
+from sherlogs.utils.prompt_builder import build_prompt
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ def pipeline_node(state: AgentState) -> dict[str, Any]:
     template_dump = build_prompt(con, case)
 
     messages = [
-        SystemMessage(content=SYSTEM_PROMPT),
+        SystemMessage(content=SYSTEM_PROMPT_AGENT),
         HumanMessage(
             content=f"{template_dump}\n\n"
             f"Investigate this incident. Use your tools to drill deeper, follow error chains, "
@@ -180,11 +180,6 @@ def run_agent(case: IncidentCase, verbose: bool = False) -> Verdict:
         "hops_remaining": MAX_HOPS,
         "verdict": None,
     }
-
-    if verbose:
-        logger.info("%s", "=" * 60)
-        logger.info("Investigating: %s_%s/%s", case.service, case.fault, case.instance)
-        logger.info("%s", "=" * 60)
 
     final_state: dict[str, Any] = {}
     for step in app.stream(initial_state, stream_mode="updates"):

@@ -28,14 +28,11 @@ def create_tools(con: duckdb.DuckDBPyConnection, inject_time: int) -> list[BaseT
 
         if service is None:
             return _summarize_overview(con, window_start, window_end)
-        return _summarize_service(con, service, window_start, window_end)
+        return _summarize_service(con, service, window_start, window_end, inject_ns)
 
     @tool
     def get_lines(template_id: int, k: int = 20) -> str:
         """Evidence tool: get raw log lines for a specific template.
-
-        Use this AFTER summarize to see the actual log lines behind a template.
-        Pass the template_id from summarize output (e.g. T1941 → template_id=1941).
 
         Args:
             template_id: The template ID from summarize output.
@@ -108,10 +105,9 @@ def _summarize_service(
     service: str,
     window_start: int,
     window_end: int,
+    inject_ns: int,
 ) -> str:
     """Detailed view of one service: top templates with text, counts, and time offsets."""
-
-    inject_ns = window_start + WINDOW_BEFORE_NS  # recover T0 from the window start
 
     rows = con.execute(
         """

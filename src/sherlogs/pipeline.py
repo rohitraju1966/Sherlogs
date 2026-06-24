@@ -22,9 +22,7 @@ def build_tables(case: IncidentCase) -> duckdb.DuckDBPyConnection:
     """Run the full deterministic pipeline for one incident case."""
 
     con = duckdb.connect()
-    load_logs_table(
-        case, con
-    )  # loader owns the on-disk schema; we work on `service` from here on
+    load_logs_table(case, con)
 
     miner, id_map = _run_drain3(con)
     _build_logs_table(con, id_map)
@@ -56,7 +54,7 @@ def _run_drain3(
 
     config = TemplateMinerConfig()
 
-    # Fixed-depth tree depth + token similarity threshold (see config.py for rationale).
+    # fixed-depth tree depth + token similarity threshold (see config.py for rationale).
     config.drain_depth = DRAIN_DEPTH
     config.drain_sim_th = DRAIN_SIM_TH
     miner = TemplateMiner(config=config)

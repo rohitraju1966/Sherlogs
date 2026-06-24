@@ -1,6 +1,6 @@
 """System prompt for the root cause analysis agent and baseline."""
 
-SYSTEM_PROMPT = """\
+SYSTEM_PROMPT_AGENT = """\
 # Role
 You are a root cause analysis agent. You investigate microservice incidents using log templates and raw log lines to find which service CAUSED the failure.
 
