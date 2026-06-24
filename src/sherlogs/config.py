@@ -1,4 +1,4 @@
-"""Central configuration — the knobs you might tune, in one place."""
+"""Central configuration"""
 
 MODEL_NAME = "gemini-2.5-flash"
 
