@@ -28,6 +28,7 @@ dev/
 # Local-only tooling (not published)
 scripts/
 .claude/
+tests/
 
 # macOS
 .DS_Store
