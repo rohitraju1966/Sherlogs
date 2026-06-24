@@ -1,0 +1,14 @@
+{
+  "venvPath": ".",
+  "venv": "sherlogs_env",
+  "extraPaths": ["src"],
+  "include": ["src", "tests"],
+  "reportUnusedCallResult": false,
+  "reportImplicitStringConcatenation": false,
+  "reportAny": false,
+  "reportUnknownVariableType": false,
+  "reportUnknownMemberType": false,
+  "reportUnknownArgumentType": false,
+  "reportMissingTypeStubs": false,
+  "reportExplicitAny": false,
+}
