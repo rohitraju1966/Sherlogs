@@ -1,8 +1,6 @@
 """Loads RCAEval RE3 incident cases from disk (Sock Shop, Online Boutique, Train Ticket).
 
-This is the only module that knows the on-disk format — the folder layout and the CSV
-column names. Porting Sherlogs to a new data source means changing only this file.
-Prerequisites: download RE3 from https://zenodo.org/records/14590730 and unzip into data/.
+Change this file to adapt to a new data source.
 """
 
 import re

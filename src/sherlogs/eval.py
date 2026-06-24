@@ -55,7 +55,7 @@ def evaluate_case(case: IncidentCase, mode: str = "baseline") -> EvalResult:
 
 
 def run_eval(root: Path, mode: str = "baseline") -> list[EvalResult]:
-    """Run eval on all cases and log a summary."""
+    """Run eval on all cases and log a summary. Avoid this function if you do not have ground truth labels."""
     load_dotenv()
     cases = load_dataset(root)
     results: list[EvalResult] = []
@@ -65,7 +65,7 @@ def run_eval(root: Path, mode: str = "baseline") -> list[EvalResult]:
     for case in cases:
         result = evaluate_case(case, mode=mode)
         results.append(result)
-        status = "✓" if result["ac1"] else ("~" if result["ac3"] else "✗")
+        status = "AC1" if result["ac1"] else ("AC3" if result["ac3"] else "Not AC1/AC3")
         logger.info(
             "  %s %-25s truth=%-12s pred=%-12s RR=%.2f  %5.1fs  conf=%s",
             status,
@@ -121,10 +121,11 @@ def _log_summary(results: list[EvalResult]) -> None:
 
 
 if __name__ == "__main__":
-    # Surface Sherlogs' own progress logs, but keep third-party libraries (Drain3) quiet.
     logging.basicConfig(level=logging.WARNING, format="%(message)s")
     logging.getLogger("sherlogs").setLevel(logging.INFO)
     mode = "agent" if "--agent" in sys.argv else "baseline"
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    root = Path(args[0]) if args else Path("data/RE3-SS")
+    root = (
+        Path(args[0]) if args else Path("/Users/rohit/Desktop/sherlogs-dev/data/RE3-SS")
+    )
     run_eval(root, mode=mode)
